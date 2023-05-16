@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext, useState, createContext } from "react";
+import ReactDOM from 'react-dom/client';
 
-function App() {
+const userContext = createContext<string | null>(null);
+
+const UserPage: React.FC = () => {
+  const context = useContext(userContext);
+  return <div>{context}</div>;
+};
+
+const NewComponent: React.FC = () => {
+  const context = useContext(userContext);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      This is a new component
+      <br />
+      {context}
+    </div>
+  );
+};
+
+export default function App() {
+  const [user, setUser] = useState("Initial Value");
+  const handleClick = () => {
+    setUser("Hello from button " + new Date().toDateString());
+  };
+  console.log(user)
+  return (
+    <div>
+      <userContext.Provider value={user}>
+        <p>Hello from homepage</p>
+        <div onClick={handleClick}>Change Value</div>
+        <UserPage />
+        ----
+        <NewComponent />
+      </userContext.Provider>
     </div>
   );
 }
-
-export default App;
